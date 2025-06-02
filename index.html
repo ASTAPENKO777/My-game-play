@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Block Tycoon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="score-display">
+                <span id="score">Рахунок: 0</span>
+                <span id="highscore">Рекорд: 0</span>
+            </div>
+        </div>
+
+        <div class="game-board-container">
+            <div id="board" class="game-board"></div>
+        </div>
+
+        <div class="controls-container">
+            <div class="controls">
+                <div class="joystick">
+                    <button id="rotate-btn" class="control-btn">↻</button>
+                    <div class="directional-controls">
+                        <button id="left-btn" class="control-btn">←</button>
+                        <button id="down-btn" class="control-btn">↓</button>
+                        <button id="right-btn" class="control-btn">→</button>
+                    </div>
+                    <button id="drop-btn" class="control-btn">⬇️ Швидкий скид</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="game-overlay" class="game-overlay">
+            <div class="overlay-content">
+                <h1>Block Tycoon</h1>
+                <div class="menu-buttons">
+                    <button id="start-btn" class="menu-btn">🎮 Почати гру</button>
+                    <button id="shop-btn-menu" class="menu-btn">🛍️ Магазин</button>
+                    <button id="how-to-play-btn" class="menu-btn">❓ Як грати?</button>
+                    <button id="credits-btn" class="menu-btn">✨ Автор</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="game-over-overlay" class="game-overlay" style="display: none;">
+            <div class="overlay-content">
+                <h1>Game Over</h1>
+                <p id="final-score">Рахунок: 0 | Рекорд: 0</p>
+                <div class="menu-buttons">
+                    <button id="retry-btn" class="menu-btn">🔄 Спробувати знову</button>
+                    <button id="menu-btn" class="menu-btn">🏠 Меню</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="shop-overlay" class="shop-overlay">
+            <div class="shop-content">
+                <h2>🛒 Магазин Blocoins</h2>
+                <div id="shop-blocoins" style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">Blocoins: 0</div>
+                <div class="shop-items">
+                    <div class="shop-item" data-item="skin1" data-cost="100">
+                        <div class="item-preview skin-preview">
+                            <div class="skin-cell I"></div>
+                            <div class="skin-cell J"></div>
+                            <div class="skin-cell L"></div>
+                            <div class="skin-cell O"></div>
+                        </div>
+                        <div class="item-info">
+                            <p>Скін "Класика"</p>
+                            <p>100 Blocoins</p>
+                        </div>
+                        <button class="buy-btn">Купити</button>
+                    </div>
+
+                    <div class="shop-item" data-item="skin2" data-cost="200">
+                        <div class="item-preview skin-preview">
+                            <div class="skin-cell S"></div>
+                            <div class="skin-cell T"></div>
+                            <div class="skin-cell Z"></div>
+                            <div class="skin-cell I"></div>
+                        </div>
+                        <div class="item-info">
+                            <p>Скін "Пастель"</p>
+                            <p>200 Blocoins</p>
+                        </div>
+                        <button class="buy-btn">Купити</button>
+                    </div>
+
+                    <div class="shop-item" data-item="slowmo" data-cost="300">
+                        <div class="item-preview">⏱️</div>
+                        <div class="item-info">
+                            <p>Сповільнення часу</p>
+                            <p>300 Blocoins</p>
+                        </div>
+                        <button class="buy-btn">Купити</button>
+                    </div>
+
+                    <div class="shop-item" data-item="multiplier" data-cost="500">
+                        <div class="item-preview">✖️</div>
+                        <div class="item-info">
+                            <p>Множник x1.5</p>
+                            <p>500 Blocoins</p>
+                        </div>
+                        <button class="buy-btn">Купити</button>
+                    </div>
+                </div>
+                <button id="close-shop-btn" class="menu-btn">🔙 Закрити магазин</button>
+            </div>
+        </div>
+    </div>
+    <script src="../static/script.js"></script>
+</body>
+</html>
