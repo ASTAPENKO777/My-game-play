@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const COLS = 10;
-    const ROWS = 20;
-    const BLOCK_SIZE = window.innerWidth < 400 ? 25 : 30;
+    const COLS = 8;
+    const ROWS = 11;
+    const BLOCK_SIZE = window.innerWidth < 400 ? 35 : 40;
     const BONUS_CHANCE = 0.1;
     
     const board = document.getElementById('board');
