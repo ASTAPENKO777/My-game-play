@@ -205,13 +205,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return false;
     }
     
-    function dropPiece() {
-        if (!currentPiece || !gameActive) return;
-        vibrate();
-        
-        while (movePiece('down')) {}
-    }
-    
     function lockPiece() {
         const { shape, row, col, color } = currentPiece;
         let hasBonus = color === 'bonus';
@@ -443,8 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "🎮 Як грати:\n\n" +
                 "← → - рухати фігуру\n" +
                 "↻ - обертати фігуру\n" +
-                "↓ - прискорити падіння\n" +
-                "⬇️ - швидкий скид"
+                "↓ - прискорити падіння"
             );
         });
         
@@ -462,7 +454,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('right-btn').addEventListener('click', () => movePiece('right'));
         document.getElementById('down-btn').addEventListener('click', () => movePiece('down'));
         document.getElementById('rotate-btn').addEventListener('click', rotatePiece);
-        document.getElementById('drop-btn').addEventListener('click', dropPiece);
         
         document.querySelectorAll('.buy-btn').forEach(btn => {
             btn.addEventListener('click', function() {
