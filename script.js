@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const COLS = 8;
-    const ROWS = 11;
+    const ROWS = 12;
     const BLOCK_SIZE = window.innerWidth < 400 ? 35 : 40;
     const BONUS_CHANCE = 0.1;
     
@@ -87,14 +87,22 @@ document.addEventListener('DOMContentLoaded', () => {
         board.innerHTML = '';
         boardArray = Array(ROWS).fill().map(() => Array(COLS).fill(0));
         
+        board.classList.add('appearing');
+        
         for (let row = 0; row < ROWS; row++) {
             for (let col = 0; col < COLS; col++) {
                 const cell = document.createElement('div');
                 cell.classList.add('cell');
                 cell.id = `cell-${row}-${col}`;
+                cell.style.setProperty('--row', row);
+                cell.style.setProperty('--col', col);
                 board.appendChild(cell);
             }
         }
+        
+        setTimeout(() => {
+            board.classList.remove('appearing');
+        }, 1000);
     }
     
     function generatePiece() {
@@ -283,13 +291,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         setTimeout(() => {
-            rowsToClear.forEach(row => {
+            for (let row = 0; row < ROWS - lines; row++) {
                 for (let col = 0; col < COLS; col++) {
-                    const cell = document.getElementById(`cell-${row}-${col}`);
-                    cell.classList.remove('clearing');
+                    if (boardArray[row][col]) {
+                        const cell = document.getElementById(`cell-${row}-${col}`);
+                        const dropDistance = (lines * 100) / ROWS;
+                        cell.style.setProperty('--drop-distance', `${dropDistance}%`);
+                        cell.classList.add('dropping');
+                    }
                 }
-            });
-            draw();
+            }
+            
+            setTimeout(() => {
+                rowsToClear.forEach(row => {
+                    for (let col = 0; col < COLS; col++) {
+                        const cell = document.getElementById(`cell-${row}-${col}`);
+                        cell.classList.remove('clearing');
+                    }
+                });
+                
+                document.querySelectorAll('.dropping').forEach(cell => {
+                    cell.classList.remove('dropping');
+                });
+                
+                draw();
+            }, 300);
         }, 300);
     }
     
