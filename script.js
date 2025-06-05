@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function rotatePiece() {
         if (!currentPiece || !gameActive) return;
-        playSound('./sounds/rotate.mp3'); 
+        playSound('rotate.mp3'); 
         vibrate();
 
         const newShape = currentPiece.shape[0].map((_, i) => 
@@ -201,12 +201,12 @@ document.addEventListener('DOMContentLoaded', () => {
         switch (direction) {
             case 'left':
                 newCol--;
-                playSound('./sounds/move.mp3'); 
+                playSound('move.mp3'); 
                 vibrate(30);
                 break;
             case 'right':
                 newCol++;
-                playSound('./sounds/move.mp3'); 
+                playSound('move.mp3'); 
                 vibrate(30);
                 break;
             case 'down':
@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function gameOver() {
-        playSound('./sounds/game-over.mp3'); 
+        playSound('game-over.mp3'); 
         vibrate(200);
         gameActive = false;
         clearInterval(gameInterval);
