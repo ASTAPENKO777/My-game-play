@@ -49,6 +49,19 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: 'Z', shape: [[1,1,0], [0,1,1], [0,0,0]], color: 'Z' }
     ];
     
+    function isTelegramWebApp() {
+        return window.Telegram && window.Telegram.WebApp;
+    }
+    
+    function setupTelegramWebApp() {
+        if (isTelegramWebApp()) {
+            Telegram.WebApp.expand();
+            Telegram.WebApp.enableClosingConfirmation();
+            Telegram.WebApp.setHeaderColor('#6c5ce7');
+            Telegram.WebApp.setBackgroundColor('#2d3436');
+        }
+    }
+    
     function vibrate(duration = 50) {
         if ('vibrate' in navigator) {
             navigator.vibrate(duration);
@@ -166,12 +179,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function rotatePiece() {
         if (!currentPiece || !gameActive) return;
+        playSound('./sounds/rotate.mp3'); 
         vibrate();
-        
+
         const newShape = currentPiece.shape[0].map((_, i) => 
             currentPiece.shape.map(row => row[i]).reverse()
         );
-        
+
         if (!collision(currentPiece.row, currentPiece.col, newShape)) {
             currentPiece.shape = newShape;
             draw();
@@ -180,36 +194,38 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function movePiece(direction) {
         if (!currentPiece || !gameActive) return;
-        
+
         let newRow = currentPiece.row;
         let newCol = currentPiece.col;
-        
+
         switch (direction) {
             case 'left':
                 newCol--;
+                playSound('./sounds/move.mp3'); 
                 vibrate(30);
                 break;
             case 'right':
                 newCol++;
+                playSound('./sounds/move.mp3'); 
                 vibrate(30);
                 break;
             case 'down':
                 newRow++;
                 break;
         }
-        
+
         if (!collision(newRow, newCol, currentPiece.shape)) {
             currentPiece.row = newRow;
             currentPiece.col = newCol;
             draw();
             return true;
         }
-        
+
         if (direction === 'down') {
             lockPiece();
             return false;
         }
-        
+
         return false;
     }
     
@@ -324,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         gameActive = true;
         score = 0;
-        dropSpeed = 1000;
+        dropSpeed = playerSettings.slowMo ? 1500 : 1000;
         
         createBoard();
         nextPiece = generatePiece();
@@ -343,14 +359,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function gameOver() {
+        playSound('./sounds/game-over.mp3'); 
         vibrate(200);
         gameActive = false;
         clearInterval(gameInterval);
-        
+
         if (score > highscore) {
             highscore = score;
         }
-        
+
         finalScoreDisplay.textContent = `Рахунок: ${score} | Рекорд: ${highscore}`;
         gameOverOverlay.style.display = 'flex';
         saveGame();
@@ -375,13 +392,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const touchEndY = e.changedTouches[0].clientY;
         const diffX = touchEndX - touchStartX;
         const diffY = touchEndY - touchStartY;
+        const threshold = Math.min(window.innerWidth, window.innerHeight) * 0.1;
         
         if (Math.abs(diffX) > Math.abs(diffY)) {
-            if (Math.abs(diffX) > 50) {
+            if (Math.abs(diffX) > threshold) {
                 diffX > 0 ? movePiece('right') : movePiece('left');
             }
         } else {
-            if (Math.abs(diffY) > 50) {
+            if (Math.abs(diffY) > threshold) {
                 diffY > 0 ? movePiece('down') : rotatePiece();
             }
         }
@@ -439,13 +457,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    function playSound(soundFile) {
+        const audio = new Audio(soundFile);
+        audio.play();
+    }
+    
     function init() {
+        setupTelegramWebApp();
         loadGame();
         createBoard();
         
-        board.addEventListener('touchstart', handleTouchStart, { passive: false });
-        board.addEventListener('touchmove', handleTouchMove, { passive: false });
-        board.addEventListener('touchend', handleTouchEnd, { passive: false });
+        const touchOptions = { passive: false };
+        board.addEventListener('touchstart', handleTouchStart, touchOptions);
+        board.addEventListener('touchmove', handleTouchMove, touchOptions);
+        board.addEventListener('touchend', handleTouchEnd, touchOptions);
+        
+        document.addEventListener('touchmove', (e) => {
+            if (gameActive) e.preventDefault();
+        }, { passive: false });
         
         startBtn.addEventListener('click', startGame);
         shopBtnMenu.addEventListener('click', openShop);
@@ -490,6 +519,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         updateDisplays();
+        
+        window.addEventListener('resize', () => {
+            if (gameActive) {
+                draw();
+            }
+        });
     }
     
     init();
